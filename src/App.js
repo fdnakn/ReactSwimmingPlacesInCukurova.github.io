@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import Menu from "./Menu";
+import items from "./data";
+import Categories from "./Categories";
+
+const allCategories = ["all", ...new Set(items.map((item) => item.category))]; //all categories like adana mersin tarsus
 
 function App() {
+  const [menuItems, setMenuItems] = useState(items); //tatil bölgelerimiz
+  const [activeCategory, setActiveCategory] = useState(""); //adana mı , mersin mi kategori
+  const [categories, setCategories] = useState(allCategories);
+
+  const filterItems = (category) => {
+    setActiveCategory(category);
+    if (category === "all") {
+      setMenuItems(items);
+      return;
+    }
+    const newItems = items.filter((item) => item.category === category);
+    setMenuItems(newItems);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <section className="holiday section">
+        <div className="title">
+          <h2>Swimming Places in Cukurova</h2>
+          <div className="underline"></div>
+        </div>
+        <Categories
+          categories={categories}
+          activeCategory={activeCategory}
+          filterItems={filterItems}
+        />
+
+        <Menu items={menuItems} />
+      </section>
+    </main>
   );
 }
 
